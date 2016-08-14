@@ -4,6 +4,7 @@
   "description": "A cross-platform user interface for NPM",
   "main": "main.js",
   "scripts": {
+    "postinstall": "jspm install",
     "start": "electron ."
   },
   "keywords": [
