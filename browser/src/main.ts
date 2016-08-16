@@ -1,4 +1,5 @@
-import f from './secondary';
-const asd:string = `Hello from TS: ${f()}`;
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-alert(asd);
+import { AppModule } from './app/app.module';
+
+platformBrowserDynamic().bootstrapModule(AppModule);
