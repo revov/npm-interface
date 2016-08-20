@@ -7,8 +7,8 @@
   // map tells the System loader where to look for things
   var map = {
     'npm-interface': 'out',
-    '@angular': '../node_modules/@angular',
-    'rxjs': '../node_modules/rxjs'
+    '@angular': 'node_modules/@angular',
+    'rxjs': 'node_modules/rxjs'
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -47,7 +47,8 @@
   }
 
   // Most environments should use UMD; some (Karma) need the individual index files
-  var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+  // var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
+  var setPackageConfig = packIndex;
 
   // Add package entries for angular packages
   ngPackageNames.forEach(setPackageConfig);
@@ -56,6 +57,9 @@
     transpiler: false,
     browserConfig: {
       "baseURL": "."
+    },
+    paths: {
+      'node_modules/*': '../node_modules/*'
     },
     map: map,
     packages: packages

@@ -8,6 +8,11 @@
         "experimentalDecorators": true,
         "removeComments": false,
         "noImplicitAny": false,
+        "lib": ["es6", "dom"],
         "outDir": "out"
+    },
+    "angularCompilerOptions": {
+        "genDir": ".",
+        "debug": false
     }
 }

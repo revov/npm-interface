@@ -12,16 +12,23 @@
 
     <!-- 2. Configure SystemJS -->
     <script src="systemjs.config.js"></script>
-
-    <script>
-      System.import('npm-interface')
-        .catch(function(err){ console.error(err); });
-    </script>
   </head>
 
   <!-- 3. Display the application -->
   <body>
-    <my-app>Loading...</my-app>
-  </body>
+    <application>Loading...</application>
+
+        <script>
+          if(process.env.ELECTRON_ENV === 'production') {
+            System.import('out/all.bundle.js')
+              .then(function() {
+                System.import('npm-interface');
+              })
+              .catch(function(err){ console.error(err); });
+          } else {
+            System.import('npm-interface/main.dev')
+              .catch(function(err){ console.error(err); });
+          }
+      </script>
 </html>
 
