@@ -4,10 +4,8 @@
   "description": "A cross-platform user interface for NPM",
   "main": "main.js",
   "scripts": {
-    "watch": "tsc -p browser --watch",
-    "build": "ngc -p browser",
-    "bundle": "node ./scripts/bundle.js",
-    "start": "cross-env ELECTRON_ENV=development electron .",
+    "build": "ngc -p browser; node ./scripts/bundle.js",
+    "start": "cross-env ELECTRON_ENV=development concurrently --kill-others \"tsc --pretty -p browser --watch\" \"electron .\"",
     "start:prod": "cross-env ELECTRON_ENV=production electron ."
   },
   "keywords": [
@@ -30,6 +28,7 @@
     "@angular/platform-browser": "2.0.0-rc.5",
     "@angular/platform-browser-dynamic": "2.0.0-rc.5",
     "@angular/platform-server": "2.0.0-rc.5",
+    "concurrently": "2.2.0",
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.36",
