@@ -8,7 +8,10 @@
   var map = {
     'npm-interface': 'out',
     '@angular': 'node_modules/@angular',
-    'rxjs': 'node_modules/rxjs'
+    'rxjs': 'node_modules/rxjs',
+    '@ng-bootstrap': 'node_modules/@ng-bootstrap',
+    'css': 'node_modules/systemjs-plugin-css/css.js',
+    'bootstrap': 'node_modules/bootstrap',
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -21,6 +24,26 @@
       defaultExtension: 'js'
     },
     'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+    '@ng-bootstrap/ng-bootstrap': {
+      main: 'index.js',
+      defaultExtension: 'js',
+      map: {
+        './accordion': './accordion/index',
+        './alert': './alert/index',
+        './buttons': './buttons/index',
+        './carousel': './carousel/index',
+        './collapse': './collapse/index',
+        './dropdown': './dropdown/index',
+        './pagination': './pagination/index',
+        './popover': './popover/index',
+        './progressbar': './progressbar/index',
+        './rating': './rating/index',
+        './tabset': './tabset/index',
+        './timepicker': './timepicker/index',
+        './tooltip': './tooltip/index',
+        './typeahead': './typeahead/index',
+      }
+    },
   };
 
   var ngPackageNames = [
@@ -60,6 +83,9 @@
     },
     paths: {
       'node_modules/*': '../node_modules/*'
+    },
+    meta: {
+      '*.css': { loader: 'css' }
     },
     map: map,
     packages: packages

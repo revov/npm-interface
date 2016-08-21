@@ -1,4 +1,17 @@
 const path = require("path");
+const fs = require('fs');
+
+// https://github.com/nodejs/node/issues/7163#issuecomment-237297482
+fs.writeFileSync(
+    path.resolve(__dirname, '../node_modules/babel-runtime/core-js/get-iterator.js'),
+    'module.exports = { __esModule: true, "default": require("core-js/library/fn/get-iterator") };'
+);
+
+fs.writeFileSync(
+    path.resolve(__dirname, '../node_modules/babel-runtime/core-js/json/stringify.js'),
+    'module.exports = { __esModule: true, "default": require("core-js/library/fn/json/stringify") };'
+);
+
 const baseURL = path.resolve(__dirname, '../browser');
 // For whatever reason the builder is not looking for node_modules in the correct place, so we need to chdir to the baseUrl
 require('process').chdir(baseURL);
