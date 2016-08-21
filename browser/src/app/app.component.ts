@@ -1,19 +1,39 @@
 import { Component } from '@angular/core';
-import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
 @Component({
     selector: 'application',
     template: `
-        <h1>NPM Interface</h1>
-        <button type="button" class="btn btn-secondary" placement="right" ngbPopover="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." title="Popover on right">
-            Popover on right
-        </button>
+        <div class="wrapper">
+            <sidebar>
+                <a href="javascript:void(0)" class="nav-link" [routerLink]="['/package-info']" routerLinkActive="active">
+                    package.json
+                </a>
+                <a href="javascript:void(0)" class="nav-link" [routerLink]="['/dependencies']" routerLinkActive="active">Dependencies</a>
+                <a href="javascript:void(0)" class="nav-link" [routerLink]="['/scripts']" routerLinkActive="active">Scripts</a>
+            </sidebar>
+
+            <div class="container-fluid page-content-wrapper">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    `,
+    styles: [`
+        .wrapper {
+            padding-left:200px;
+            margin:0;
+        }
+    `,
     `
+        .nav-link {
+            border-radius: 0rem;
+        }
+    `,
+    `
+        .page-content-wrapper {
+            padding: 1rem;
+        }
+    `]
 })
 export class AppComponent {
-    model = {
-        left: true,
-        middle: true,
-        right: false,
-    };
 }
