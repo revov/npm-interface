@@ -1,9 +1,9 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
-import { PackageInfoComponent }    from './package-info/package-info.component';
-import { DependenciesComponent }    from './dependencies/dependencies.component';
-import { ScriptsComponent }    from './scripts/scripts.component';
+import { PackageInfoComponent }    from './routes/package-info/package-info.component';
+import { DependenciesComponent }    from './routes/dependencies/dependencies.component';
+import { ScriptsComponent }    from './routes/scripts/scripts.component';
 
 export const appRoutes: Routes = [
   {

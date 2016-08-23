@@ -22,6 +22,13 @@ const Builder = require('systemjs-builder');
 // sets the baseURL and loads the configuration file
 var builder = new Builder(baseURL, path.resolve(baseURL, 'systemjs.config.js'));
 
+// Need to override the config when bundling due to https://github.com/systemjs/builder/issues/670
+builder.config({
+    map: {
+        '@node/electron': '@empty'
+    }
+});
+
 builder.bundle('npm-interface', 'out/all.bundle.js', { minify: false, sourceMaps: false })
     .then(function(output) {
         console.log('Build complete');

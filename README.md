@@ -6,7 +6,7 @@ In development mode the ES5 angular dist files are used along with JIT (Just in 
 npm run start
 ```
 
-In production mode the AOT (Ahead of Time) template compilation is used. Unfortunately ng-bootstrap **does not yet support offline compilation** so production builds do not work at the moment. To compile AOT and bundle the whole app run:
+In production mode the AOT (Ahead of Time) template compilation is used. Unfortunately ng-bootstrap **does not yet support offline compilation** so production builds may not work at the moment. To compile AOT and bundle the whole app run:
 ```
 npm run build
 ```

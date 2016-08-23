@@ -1,10 +1,25 @@
 const {Menu} = require('electron')
 const path = require('path');
+const {dialog} = require('electron');
+const loadProject = require('./info-collector/load-project.js');
 
 const template = [
   {
     label: 'File',
     submenu: [
+      {
+        label: 'Open',
+        accelerator: process.platform === 'darwin' ? 'Command+O' : 'Ctrl+O',
+        click (item, focusedWindow) {
+          loadProject(focusedWindow, dialog.showOpenDialog(
+            focusedWindow,
+            {
+              title: 'Open a folder, containing package.json',
+              properties: ['openDirectory']
+            }
+          ));
+        }
+      },
       {
         role: 'quit'
       }
