@@ -1,13 +1,13 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 import PackageMetadataModel from '../../models/package-metadata.model';
 
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
-    // changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div>
+            <h4 *ngIf="currentPackage == null">Please select a project to open (File -> Open)</h4>
             <packageSummary *ngIf="currentPackage != null" [packageMetadata]="currentPackage"></packageSummary>
         </div>
     `,
@@ -18,7 +18,7 @@ export class PackageInfoComponent implements OnInit, OnDestroy {
 
     asd: string = 'foo';
 
-    constructor(protected projectService: ProjectService, protected ref: ChangeDetectorRef) {
+    constructor(protected projectService: ProjectService) {
 
     }
 
@@ -26,7 +26,6 @@ export class PackageInfoComponent implements OnInit, OnDestroy {
         this.currentPackageSubscription = this.projectService.currentPackage.subscribe(
             packageMetadata => {
                 this.currentPackage = packageMetadata;
-                this.ref.markForCheck();
                 console.log(packageMetadata);
             }
         );

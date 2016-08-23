@@ -12,6 +12,7 @@
     '@ng-bootstrap': 'node_modules/@ng-bootstrap',
     'css': 'node_modules/systemjs-plugin-css/css.js',
     'bootstrap': 'node_modules/bootstrap',
+    'marked': 'node_modules/marked',
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -43,6 +44,10 @@
         './tooltip': './tooltip/index',
         './typeahead': './typeahead/index',
       }
+    },
+    'marked': {
+      main: 'lib/marked.js',
+      defaultExtension: 'js',
     },
   };
 

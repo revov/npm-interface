@@ -11,6 +11,7 @@ import { DependenciesComponent }    from './routes/dependencies/dependencies.com
 import { ScriptsComponent }    from './routes/scripts/scripts.component';
 
 import { ProjectService }    from './services/project.service';
+import { ElectronIpcModule } from '../electron-ipc/electron-ipc.module';
 
 // import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap/popover/index';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { routing, appRoutingProviders } from './routes';
 
 @NgModule({
-    imports:      [ BrowserModule, CommonModule, routing, FormsModule ],
+    imports:      [ BrowserModule, CommonModule, routing, FormsModule, ElectronIpcModule.forRoot() ],
     declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent ],
     providers:    [ appRoutingProviders, ProjectService ],
     bootstrap:    [ AppComponent ]

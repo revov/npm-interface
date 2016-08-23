@@ -4,7 +4,7 @@
   "description": "A cross-platform user interface for NPM",
   "main": "main.js",
   "scripts": {
-    "build": "ngc -p browser; node ./scripts/bundle.js",
+    "build": "ngc -p browser && node ./scripts/bundle.js",
     "start": "cross-env ELECTRON_ENV=development concurrently --kill-others \"tsc --pretty -p browser --watch\" \"electron .\"",
     "start:prod": "cross-env ELECTRON_ENV=production electron ."
   },
@@ -33,6 +33,7 @@
     "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.2",
     "bootstrap": "4.0.0-alpha.3",
     "concurrently": "2.2.0",
+    "marked": "0.3.6",
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.36",
