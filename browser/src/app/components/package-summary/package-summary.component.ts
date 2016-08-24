@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import 'bootstrap/dist/css/bootstrap.css';
-import PackageMetadataModel from '../../models/package-metadata.model';
 import marked = require('marked');
 import { ProjectService } from '../../services/project.service';
 
@@ -9,10 +8,12 @@ import { ProjectService } from '../../services/project.service';
     template: `
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
-                <h1 class="display-3">{{packageMetadata.packageJson.name}}</h1>
-                <p class="lead">{{packageMetadata.packageJson.description}}</p>
+                <h1 class="display-3">{{packageInfo.name}}</h1>
+                <p class="lead">{{packageInfo.description}}</p>
                 <hr class="m-y-2">
-                <p>{{packageMetadata.packageJson.version}}</p>
+                <p *ngIf="packageInfo.version"><i>Version:</i> {{packageInfo.version}}</p>
+                <p *ngIf="packageInfo.author"><i>Author:</i> {{packageInfo.author.name}}</p>
+                <p *ngIf="packageInfo.license"><i>License:</i> {{packageInfo.license}}</p>
             </div>
         </div>
         <div [innerHtml]="readmeHtml"></div>
@@ -24,14 +25,14 @@ export class PackageSummaryComponent implements OnChanges {
     readmeHtml: string = '';
 
     @Input()
-    packageMetadata: PackageMetadataModel;
+    packageInfo: any;
 
     constructor(protected projectService: ProjectService) {
 
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.projectService.getReadme(this.packageMetadata.path)
+        this.projectService.getReadme(this.packageInfo.path)
             .then(readme => {
                 marked.setOptions({sanitize: true});
                 this.readmeHtml = marked(readme);

@@ -36,7 +36,7 @@
     "marked": "0.3.6",
     "reflect-metadata": "0.1.8",
     "rxjs": "5.0.0-beta.6",
-    "systemjs": "0.19.36",
+    "systemjs": "0.19.37",
     "systemjs-builder": "0.15.26",
     "systemjs-plugin-css": "0.1.26",
     "typescript": "1.9.0-dev.20160627-1.0",

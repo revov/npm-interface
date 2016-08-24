@@ -1,5 +1,4 @@
 import { Injectable, NgZone } from '@angular/core';
-import PackageMetadataModel from '../models/package-metadata.model';
 import { IpcService } from '../../electron-ipc/services/ipc.service';
 
 import { Observable } from 'rxjs/Observable';
@@ -7,15 +6,15 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Injectable()
 export class ProjectService {
-    protected _currentPackageSubject: ReplaySubject<PackageMetadataModel> = new ReplaySubject<PackageMetadataModel>(1);
-    currentPackage: Observable<PackageMetadataModel> = this._currentPackageSubject.asObservable();
+    protected _currentPackageSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
+    currentPackage: Observable<any> = this._currentPackageSubject.asObservable();
 
     constructor(protected ipc: IpcService) {
         this.ipc.on('load-project', this.handleProjectLoaded);
     }
 
-    protected handleProjectLoaded = (event, packageMetadata: PackageMetadataModel) => {
-        this._currentPackageSubject.next(packageMetadata);
+    protected handleProjectLoaded = (event, packageInfo: any) => {
+        this._currentPackageSubject.next(packageInfo);
     }
 
     /**
@@ -27,5 +26,12 @@ export class ProjectService {
 
     getReadme(packagePath: string) {
         return this.ipc.send('get-readme', packagePath);
+    }
+
+    /**
+     * Gets the full info for the package and its dependencies. By default depth is -1 which means infinite depth
+     */
+    getFullInfo(packagePath: string, depth: number = -1) {
+        return this.ipc.send('get-full-info', packagePath);
     }
 }
