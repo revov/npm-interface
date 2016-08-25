@@ -1,7 +1,6 @@
 const {Menu} = require('electron')
 const path = require('path');
 const {dialog} = require('electron');
-const loadProject = require('./info-collector/load-project.js');
 
 const template = [
   {
@@ -11,13 +10,17 @@ const template = [
         label: 'Open',
         accelerator: process.platform === 'darwin' ? 'Command+O' : 'Ctrl+O',
         click (item, focusedWindow) {
-          loadProject(focusedWindow, dialog.showOpenDialog(
+          const directories = dialog.showOpenDialog(
             focusedWindow,
             {
               title: 'Open a folder, containing package.json',
               properties: ['openDirectory']
             }
-          ));
+          );
+
+          if(directories && directories[0]) {
+            focusedWindow.webContents.send('load-project', directories[0]);
+          }
         }
       },
       {

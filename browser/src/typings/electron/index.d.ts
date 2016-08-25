@@ -1,4 +1,5 @@
 declare module '@node/electron' {
   var ipcRenderer: any;
-  export { ipcRenderer };
+  var remote: any;
+  export { ipcRenderer, remote };
 }
