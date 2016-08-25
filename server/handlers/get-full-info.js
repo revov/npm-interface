@@ -9,16 +9,14 @@ function getFullInfo(packagePath, depth = -1) {
             (error, stdout, stderr) => {
                 if(error) {
                     console.log(error);
-                    reject(error);
-                    return;
+                    return reject(stderr);
                 }
 
                 const response = JSON.parse(stdout);
 
                 if(response.error.errno) {
                     console.log(response.error);
-                    reject(error);
-                    return;
+                    return reject(response.error);
                 }
 
                 resolve(response);

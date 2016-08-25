@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import 'bootstrap/dist/css/bootstrap.css';
 import marked = require('marked');
 import { ProjectService } from '../../services/project.service';
+import InstallInfoModel from '../../models/install-info.model';
 
 @Component({
     selector: 'packageSummary',
@@ -23,8 +24,7 @@ import { ProjectService } from '../../services/project.service';
             <p class="card-text">Wanted: <span class="tag tag-info">{{outdatedInfo.wanted}}</span></p>
             <p class="card-text">Latest: <span class="tag tag-warning">{{outdatedInfo.latest}}</span></p>
 
-
-            <a href="javascript:void(0)" (click)="onUpdate.next()" class="btn btn-warning">Update to {{outdatedInfo.latest}}</a>
+            <button (click)="handleUpdate()" class="btn btn-warning" [disabled]="isUpdating">Update to {{outdatedInfo.latest}}</button>
         </div>
         <div [innerHtml]="readmeHtml"></div>
     `,
@@ -33,6 +33,7 @@ import { ProjectService } from '../../services/project.service';
 })
 export class PackageSummaryComponent implements OnChanges {
     readmeHtml: string = '';
+    isUpdating: boolean = false;
 
     @Input()
     packageInfo: any;
@@ -46,7 +47,7 @@ export class PackageSummaryComponent implements OnChanges {
     };
 
     @Output()
-    onUpdate = new EventEmitter<any>();
+    onUpdate = new EventEmitter<InstallInfoModel>();
 
 
     constructor(protected projectService: ProjectService) {
@@ -62,5 +63,13 @@ export class PackageSummaryComponent implements OnChanges {
             .catch(error => {
                 this.readmeHtml = `<div class="alert alert-warning" role="alert">No Readme found.</div>`;
             });
+    }
+
+    handleUpdate() {
+        this.isUpdating=true;
+        this.onUpdate.next({
+            packageName: this.packageInfo.name,
+            packageVersion: this.outdatedInfo.latest
+        });
     }
 }

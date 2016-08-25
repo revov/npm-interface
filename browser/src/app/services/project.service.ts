@@ -15,14 +15,7 @@ export class ProjectService {
     outdatedPackages: Observable<any> = this._outdatedPackagesSubject.asObservable();
 
     constructor(protected ipc: IpcService, protected titleService: Title) {
-        this.ipc.on('load-project', (event, packagePath: string) => {
-            this.getFullInfo(packagePath)
-                .then(packageInfo => this._currentPackageSubject.next(packageInfo))
-                .catch(err => remote.dialog.showErrorBox('Invalid package directory', JSON.stringify(err)));
-            this.getOutdated(packagePath)
-                .then(outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages))
-                .catch(err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', JSON.stringify(err)));
-        });
+        this.ipc.on('load-project', this.handleProjectLoaded);
 
         this._currentPackageSubject.subscribe(packageInfo => {
             console.log(packageInfo);
@@ -30,8 +23,13 @@ export class ProjectService {
         });
     }
 
-    protected handleProjectLoaded = (event, packageInfo: any) => {
-        this._currentPackageSubject.next(packageInfo);
+    protected handleProjectLoaded = (event, packagePath: string) => {
+        this.getFullInfo(packagePath)
+            .then(packageInfo => this._currentPackageSubject.next(packageInfo))
+            .catch(err => remote.dialog.showErrorBox('Invalid package directory', err));
+        this.getOutdated(packagePath)
+            .then(outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages))
+            .catch(err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', err));
     }
 
     /**
@@ -43,6 +41,16 @@ export class ProjectService {
         this._outdatedPackagesSubject.complete();
     }
 
+    /**
+     * Load/reload a package at path
+     */
+    load(packagePath: string) {
+        this.handleProjectLoaded(null, packagePath);
+    }
+
+    /**
+     * Get the readme for a package
+     */
     getReadme(packagePath: string) {
         return this.ipc.send('get-readme', packagePath);
     }
@@ -54,7 +62,14 @@ export class ProjectService {
         return this.ipc.send('get-full-info', packagePath);
     }
 
+    /**
+     * Get a hash of the outdated packages
+     */
     getOutdated(packagePath: string) {
         return this.ipc.send('get-outdated', packagePath);
+    }
+
+    install(packagePath: string, packageToInstall:string, isDev: boolean = false) {
+        return this.ipc.send('install', packagePath, packageToInstall, isDev);
     }
 }

@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 
 import { Subscription } from 'rxjs/Subscription';
+import InstallInfoModel from '../../models/install-info.model';
+
+import { remote } from '@node/electron';
 
 @Component({
     template: `
@@ -21,7 +24,7 @@ import { Subscription } from 'rxjs/Subscription';
                         <packageSummary
                             [packageInfo]="dep.value"
                             [outdatedInfo]="outdatedPackages ? outdatedPackages[dep.key] : null"
-                            (onUpdate)="handlePackageUpdate(dep.key)"
+                            (onUpdate)="handlePackageUpdate($event)"
                         ></packageSummary>
                     </template>
                 </ngb-panel>
@@ -58,7 +61,18 @@ export class DependenciesComponent {
         this.outdatedPackagesSubscription.unsubscribe();
     }
 
-    handlePackageUpdate(dependency: string) {
-        console.log(`Updating ${dependency}`);
+    handlePackageUpdate(dependency: InstallInfoModel) {
+        this.projectService.install(
+            this.currentPackage.path,
+            `${dependency.packageName}@${dependency.packageVersion}`,
+            this.currentPackage.devDependencies[dependency.packageName] ? true : false
+        )
+            .then(() => {
+                this.projectService.load(this.currentPackage.path);
+            })
+            .catch(err => {
+                remote.dialog.showErrorBox('There was an error updating the package:', err);
+                this.projectService.load(this.currentPackage.path);
+            });
     }
 }

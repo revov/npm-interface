@@ -9,7 +9,7 @@ function getOutdated(packagePath) {
             (error, stdout, stderr) => {
                 if(error) {
                     console.log(error);
-                    return reject(error);
+                    return reject(stderr);
                 }
 
                 if(stdout == '') {
