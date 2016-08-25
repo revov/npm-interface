@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 
@@ -24,7 +24,7 @@ import { routing, appRoutingProviders } from './routes';
 @NgModule({
     imports:      [ BrowserModule, routing, FormsModule, ElectronIpcModule.forRoot(), NgbAccordionModule ],
     declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe ],
-    providers:    [ appRoutingProviders, ProjectService ],
+    providers:    [ appRoutingProviders, ProjectService, Title ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

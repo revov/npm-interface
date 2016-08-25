@@ -1,4 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { IpcService } from '../../electron-ipc/services/ipc.service';
 import { remote } from '@node/electron';
 
@@ -13,7 +14,7 @@ export class ProjectService {
     protected _outdatedPackagesSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
     outdatedPackages: Observable<any> = this._outdatedPackagesSubject.asObservable();
 
-    constructor(protected ipc: IpcService) {
+    constructor(protected ipc: IpcService, protected titleService: Title) {
         this.ipc.on('load-project', (event, packagePath: string) => {
             this.getFullInfo(packagePath)
                 .then(packageInfo => this._currentPackageSubject.next(packageInfo))
@@ -23,7 +24,10 @@ export class ProjectService {
                 .catch(err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', JSON.stringify(err)));
         });
 
-        this._currentPackageSubject.subscribe(packageInfo => console.log(packageInfo));
+        this._currentPackageSubject.subscribe(packageInfo => {
+            console.log(packageInfo);
+            this.titleService.setTitle(packageInfo.name);
+        });
     }
 
     protected handleProjectLoaded = (event, packageInfo: any) => {

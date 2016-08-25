@@ -1,4 +1,5 @@
 const {app, BrowserWindow, shell} = require('electron');
+const path = require('path');
 
 require('./server/menu');
 require('./server/handlers/index');
@@ -9,7 +10,12 @@ let win;
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 800, height: 600});
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    title: "NPM Interface",
+    icon: path.resolve(__dirname, 'favicon.png')
+  });
   win.maximize();
 
   // and load the index.html of the app.

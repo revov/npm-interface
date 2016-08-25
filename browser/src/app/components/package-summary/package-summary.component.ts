@@ -14,6 +14,7 @@ import { ProjectService } from '../../services/project.service';
                 <p *ngIf="packageInfo.version">Version: <i>{{packageInfo.version}}</i></p>
                 <p *ngIf="packageInfo.author">Author: <i>{{packageInfo.author.name}}</i></p>
                 <p *ngIf="packageInfo.license">License: <i>{{packageInfo.license}}</i></p>
+                <p *ngIf="packageInfo.keywords">Keywords: <i>{{packageInfo.keywords.join(', ')}}</i></p>
             </div>
         </div>
         <div *ngIf="outdatedInfo" class="card card-block card-success card-inverse">
