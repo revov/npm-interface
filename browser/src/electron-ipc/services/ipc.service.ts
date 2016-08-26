@@ -1,32 +1,43 @@
 import { Injectable, NgZone } from '@angular/core';
 import { ipcRenderer } from '@node/electron';
 
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
+
 @Injectable()
 export class IpcService {
     protected nextId: number = 0;
-    protected requests: {[s: string]: {resolve: any, reject: any}} = {};
+    protected requests: {[s: string]: Subject<any>} = {};
     protected listeners: {original: any, wrapped: any}[] = [];
 
     constructor(protected zone: NgZone) {
-        ipcRenderer.on('__ipcResponse', (event, id: string, error: any, returnValue: any) => {
-            // https://github.com/angular/angular/issues/5979
+        // https://github.com/angular/angular/issues/5979
+        ipcRenderer.on('__ipcResponse', (event, id: string, returnValue: any) => {
             this.zone.run(() => {
-                if(error) {
-                    this.requests[id].reject(error);
-                } else {
-                    this.requests[id].resolve(returnValue);
-                }
+                this.requests[id].next(returnValue);
+            });
+        });
 
+        ipcRenderer.on('__ipcError', (event, id: string, error: any) => {
+            this.zone.run(() => {
+                this.requests[id].error(error);
+                delete this.requests[id];
+            });
+        });
+
+        ipcRenderer.on('__ipcComplete', (event, id: string) => {
+            this.zone.run(() => {
+                this.requests[id].complete();
                 delete this.requests[id];
             });
         });
     }
 
     send(channel:string, ...args: any[]) {
-        return new Promise((resolve, reject) => {
-            this.requests[++this.nextId] = {resolve, reject};
-            ipcRenderer.send(channel, this.nextId, ...args);
-        });
+        this.requests[++this.nextId] = new Subject<any>();
+        ipcRenderer.send(channel, this.nextId, ...args);
+
+        return this.requests[this.nextId].asObservable();
     }
 
     on(channel: string, originalListener) {

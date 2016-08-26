@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class ScriptsComponent {
     protected currentPackageSubscription: Subscription;
     public currentPackage: any;
-
+    
     constructor(protected projectService: ProjectService) {
 
     }

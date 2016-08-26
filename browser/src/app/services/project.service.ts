@@ -25,11 +25,15 @@ export class ProjectService {
 
     protected handleProjectLoaded = (event, packagePath: string) => {
         this.getFullInfo(packagePath)
-            .then(packageInfo => this._currentPackageSubject.next(packageInfo))
-            .catch(err => remote.dialog.showErrorBox('Invalid package directory', err));
+            .subscribe(
+                packageInfo => this._currentPackageSubject.next(packageInfo),
+                err => remote.dialog.showErrorBox('Invalid package directory', err)
+            );
         this.getOutdated(packagePath)
-            .then(outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages))
-            .catch(err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', err));
+            .subscribe(
+                outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages),
+                err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', err)
+            );
     }
 
     /**

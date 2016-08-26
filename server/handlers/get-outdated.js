@@ -1,4 +1,5 @@
 const {ipcMain} = require('electron');
+const ipcResponse = require('../ipc-response');
 const exec = require('child_process').exec;
 
 function getOutdated(packagePath) {
@@ -26,8 +27,8 @@ function getOutdated(packagePath) {
 
 ipcMain.on('get-outdated', function(event, eventId, packagePath) {
     getOutdated(packagePath)
-        .then(value => {event.sender.send('__ipcResponse', eventId, null, value);})
-        .catch(err => {event.sender.send('__ipcResponse', eventId, err);});
+        .then(value => ipcResponse.respondAndComplete(event, eventId, value))
+        .catch(err => ipcResponse.error(event, eventId, err));
 });
 
 module.exports = getOutdated;

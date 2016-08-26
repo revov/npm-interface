@@ -1,4 +1,5 @@
 const {ipcMain} = require('electron');
+const ipcResponse = require('../ipc-response');
 const path = require('path');
 const fs = require('fs');
 
@@ -11,8 +12,8 @@ function getReadme(packagePath) {
 
 ipcMain.on('get-readme', function(event, eventId, packagePath) {
     getReadme(packagePath)
-        .then(value => event.sender.send('__ipcResponse', eventId, null, value))
-        .catch(err => event.sender.send('__ipcResponse', eventId, err));
+        .then(value => ipcResponse.respondAndComplete(event, eventId, value))
+        .catch(err => ipcResponse.error(event, eventId, err));
 });
 
 module.exports = getReadme;

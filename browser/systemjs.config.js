@@ -13,6 +13,7 @@
     'css': 'node_modules/systemjs-plugin-css/css.js',
     'bootstrap': 'node_modules/bootstrap',
     'marked': 'node_modules/marked',
+    'xterm': 'node_modules/xterm',
   };
 
   // packages tells the System loader how to load when no filename and/or no extension
@@ -48,6 +49,20 @@
     'marked': {
       main: 'lib/marked.js',
       defaultExtension: 'js',
+    },
+    'xterm': {
+      main: 'src/xterm.js',
+      meta: {
+        // 'src/xterm.js': {
+        //   format: 'global', // load this module as a global
+        //   exports: 'Terminal', // the global property to take as the module value
+        // }
+        '*': {
+          deps: [
+            'xterm/src/xterm.css',
+          ]
+        }
+      }
     },
   };
 

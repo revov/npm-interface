@@ -56,13 +56,15 @@ export class PackageSummaryComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         this.projectService.getReadme(this.packageInfo.path)
-            .then(readme => {
-                marked.setOptions({sanitize: true});
-                this.readmeHtml = marked(readme);
-            })
-            .catch(error => {
-                this.readmeHtml = `<div class="alert alert-warning" role="alert">No Readme found.</div>`;
-            });
+            .subscribe(
+                readme => {
+                    marked.setOptions({sanitize: true});
+                    this.readmeHtml = marked(readme);
+                },
+                error => {
+                    this.readmeHtml = `<div class="alert alert-warning" role="alert">No Readme found.</div>`;
+                }
+            );
     }
 
     handleUpdate() {

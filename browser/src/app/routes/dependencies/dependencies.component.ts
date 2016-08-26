@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
 
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import InstallInfoModel from '../../models/install-info.model';
 
@@ -29,14 +30,32 @@ import { remote } from '@node/electron';
                     </template>
                 </ngb-panel>
             </ngb-accordion>
+
+            <div *ngIf="showXterm" class="modal fade in" data-backdrop="true" tabindex="-1" style="display: block">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <xterm [dataStream]="xtermStream"></xterm>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" [disabled]="isBusyExecutingACommand" (click)="showXterm = false">Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showXterm" class="modal-backdrop fade in"></div>
         </div>
-    `,
+    `
 })
 export class DependenciesComponent {
     protected currentPackageSubscription: Subscription;
     protected outdatedPackagesSubscription: Subscription;
     public currentPackage: any;
     public outdatedPackages: any;
+
+    showXterm: boolean = false;
+    isBusyExecutingACommand: boolean = false;
+    xtermStream: Observable<string>;
 
     constructor(protected projectService: ProjectService) {
 
@@ -62,17 +81,27 @@ export class DependenciesComponent {
     }
 
     handlePackageUpdate(dependency: InstallInfoModel) {
-        this.projectService.install(
+        this.xtermStream = this.projectService.install(
             this.currentPackage.path,
             `${dependency.packageName}@${dependency.packageVersion}`,
             this.currentPackage.devDependencies[dependency.packageName] ? true : false
-        )
-            .then(() => {
-                this.projectService.load(this.currentPackage.path);
-            })
-            .catch(err => {
-                remote.dialog.showErrorBox('There was an error updating the package:', err);
-                this.projectService.load(this.currentPackage.path);
-            });
+        );
+
+        this.xtermStream
+            .subscribe(
+                line => {console.log(line)},
+                err => {
+                    remote.dialog.showErrorBox(`There was an error updating the package. npm exit code: ${err}`);
+                    this.projectService.load(this.currentPackage.path);
+                    this.isBusyExecutingACommand = false;
+                },
+                () => {
+                    this.projectService.load(this.currentPackage.path);
+                    this.isBusyExecutingACommand = false;
+                }
+            );
+
+        this.showXterm = true;
+        this.isBusyExecutingACommand = true;
     }
 }

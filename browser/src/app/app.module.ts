@@ -15,6 +15,7 @@ import { ProjectService } from './services/project.service';
 import { KeysPipe } from './pipes/keys.pipe';
 
 import { ElectronIpcModule } from '../electron-ipc/electron-ipc.module';
+import { XtermModule } from '../xterm/xterm.module';
 
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap/accordion/index';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +23,7 @@ import { FormsModule } from '@angular/forms';
 import { routing, appRoutingProviders } from './routes';
 
 @NgModule({
-    imports:      [ BrowserModule, routing, FormsModule, ElectronIpcModule.forRoot(), NgbAccordionModule ],
+    imports:      [ BrowserModule, routing, FormsModule, ElectronIpcModule.forRoot(), NgbAccordionModule, XtermModule ],
     declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe ],
     providers:    [ appRoutingProviders, ProjectService, Title ],
     bootstrap:    [ AppComponent ]
