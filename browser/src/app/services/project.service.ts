@@ -6,6 +6,8 @@ import { remote } from '@node/electron';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
+import { IsLoadingService } from './is-loading.service';
+
 @Injectable()
 export class ProjectService {
     protected _currentPackageSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
@@ -14,7 +16,7 @@ export class ProjectService {
     protected _outdatedPackagesSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
     outdatedPackages: Observable<any> = this._outdatedPackagesSubject.asObservable();
 
-    constructor(protected ipc: IpcService, protected titleService: Title) {
+    constructor(protected ipc: IpcService, protected titleService: Title, protected isLoadingService: IsLoadingService) {
         this.ipc.on('load-project', this.handleProjectLoaded);
 
         this._currentPackageSubject.subscribe(packageInfo => {
@@ -24,15 +26,26 @@ export class ProjectService {
     }
 
     protected handleProjectLoaded = (event, packagePath: string) => {
+        const fullInfoLoadingId = this.isLoadingService.startLoading();
         this.getFullInfo(packagePath)
             .subscribe(
                 packageInfo => this._currentPackageSubject.next(packageInfo),
-                err => remote.dialog.showErrorBox('Invalid package directory', err)
+                err => {
+                    this.isLoadingService.completeLoading(fullInfoLoadingId);
+                    remote.dialog.showErrorBox('Invalid package directory', err);
+                },
+                () => this.isLoadingService.completeLoading(fullInfoLoadingId)
             );
+
+        const outdatedLoadingId = this.isLoadingService.startLoading();
         this.getOutdated(packagePath)
             .subscribe(
                 outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages),
-                err => remote.dialog.showErrorBox('Could not obtain a list of outdated packages', err)
+                err => {
+                    this.isLoadingService.completeLoading(outdatedLoadingId);
+                    remote.dialog.showErrorBox('Could not obtain a list of outdated packages', err);
+                },
+                () => this.isLoadingService.completeLoading(outdatedLoadingId)
             );
     }
 

@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import 'bootstrap/dist/css/bootstrap.css';
+
+import { IsLoadingService } from './services/is-loading.service';
+
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'application',
@@ -15,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
             <div class="container-fluid page-content-wrapper">
                 <router-outlet></router-outlet>
+                <loadingMask [show]="isLoading"></loadingMask>
             </div>
         </div>
     `,
@@ -33,7 +38,19 @@ import 'bootstrap/dist/css/bootstrap.css';
         .page-content-wrapper {
             padding: 1rem;
         }
+
     `]
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+    protected _isLoadingSubscription: Subscription;
+
+    isLoading: boolean = false;
+
+    constructor(protected isLoadingService: IsLoadingService) {
+        this._isLoadingSubscription = isLoadingService.isLoading.subscribe(isLoading => this.isLoading = isLoading);
+    }
+
+    ngOnDestroy() {
+        this._isLoadingSubscription.unsubscribe();
+    }
 }

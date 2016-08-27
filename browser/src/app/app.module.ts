@@ -5,12 +5,14 @@ import { AppComponent } from './app.component';
 
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { PackageSummaryComponent } from './components/package-summary/package-summary.component';
+import { LoadingMaskComponent } from './components/loading-mask/loading-mask.component';
 
 import { PackageInfoComponent } from './routes/package-info/package-info.component';
 import { DependenciesComponent } from './routes/dependencies/dependencies.component';
 import { ScriptsComponent } from './routes/scripts/scripts.component';
 
 import { ProjectService } from './services/project.service';
+import { IsLoadingService } from './services/is-loading.service';
 
 import { KeysPipe } from './pipes/keys.pipe';
 
@@ -24,8 +26,8 @@ import { routing, appRoutingProviders } from './routes';
 
 @NgModule({
     imports:      [ BrowserModule, routing, FormsModule, ElectronIpcModule.forRoot(), NgbAccordionModule, XtermModule ],
-    declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe ],
-    providers:    [ appRoutingProviders, ProjectService, Title ],
+    declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe, LoadingMaskComponent ],
+    providers:    [ appRoutingProviders, ProjectService, Title, IsLoadingService ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
