@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
     template: `
         <div>
             <div *ngIf="currentPackage == null" class="alert alert-info" role="alert">Please select a project to open (File -> Open)</div>
-            <table *ngIf="shouldShowResultsTable()" class="table table-striped">
+            <table *ngIf="shouldShowResultsTable()" class="table table-hover table-striped">
                 <thead>
                     <tr>
                         <th>License</th>
@@ -18,7 +18,20 @@ import { Subscription } from 'rxjs/Subscription';
                 <tbody>
                     <tr *ngFor="let license of packagesByLicense | keys">
                         <td>{{license.key}}</td>
-                        <td>{{license.value.length}}</td>
+                        <td>
+                            <a
+                                href="javascript:void(0)"
+                                *ngIf="expandedPackagesForLicense != license.key"
+                                (click)="expandedPackagesForLicense = license.key"
+                            >
+                                {{license.value.length}}
+                            </a>
+                            <packagesPerLicense
+                                *ngIf="expandedPackagesForLicense == license.key"
+                                [packages]="license.value"
+                            >
+                            </packagesPerLicense>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -30,6 +43,7 @@ export class LicensesComponent {
     currentPackage: any;
 
     packagesByLicense: {} = {};
+    expandedPackagesForLicense: string = '';
     
     constructor(protected projectService: ProjectService, protected isLoadingService: IsLoadingService) {
 
