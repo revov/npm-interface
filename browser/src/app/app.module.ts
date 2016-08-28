@@ -9,6 +9,7 @@ import { LoadingMaskComponent } from './components/loading-mask/loading-mask.com
 
 import { PackageInfoComponent } from './routes/package-info/package-info.component';
 import { DependenciesComponent } from './routes/dependencies/dependencies.component';
+import { LicensesComponent }    from './routes/licenses/licenses.component';
 import { ScriptsComponent } from './routes/scripts/scripts.component';
 
 import { ProjectService } from './services/project.service';
@@ -26,7 +27,7 @@ import { routing, appRoutingProviders } from './routes';
 
 @NgModule({
     imports:      [ BrowserModule, routing, FormsModule, ElectronIpcModule.forRoot(), NgbAccordionModule, XtermModule ],
-    declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe, LoadingMaskComponent ],
+    declarations: [ AppComponent, SidebarComponent, PackageInfoComponent, DependenciesComponent, LicensesComponent, ScriptsComponent, PackageSummaryComponent, KeysPipe, LoadingMaskComponent ],
     providers:    [ appRoutingProviders, ProjectService, Title, IsLoadingService ],
     bootstrap:    [ AppComponent ]
 })

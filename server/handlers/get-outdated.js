@@ -8,6 +8,7 @@ function getOutdated(packagePath) {
             `npm explore ${packagePath} -- npm outdated --json --depth 0`,
             {maxBuffer: 1024 * 100000},
             (error, stdout, stderr) => {
+                console.log('DEBUG: Got outdated packages. This rarely takes over a minute');
                 if(error) {
                     console.log(error);
                     return reject(stderr);

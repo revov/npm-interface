@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
                     package.json
                 </a>
                 <a href="javascript:void(0)" class="nav-link" [routerLink]="['/dependencies']" routerLinkActive="active">Dependencies</a>
+                <a href="javascript:void(0)" class="nav-link" [routerLink]="['/licenses']" routerLinkActive="active">Licenses</a>
                 <a href="javascript:void(0)" class="nav-link" [routerLink]="['/scripts']" routerLinkActive="active">Scripts</a>
             </sidebar>
 

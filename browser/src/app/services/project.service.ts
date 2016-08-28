@@ -89,4 +89,8 @@ export class ProjectService {
     install(packagePath: string, packageToInstall:string, isDev: boolean = false) {
         return this.ipc.send('install', packagePath, packageToInstall, isDev);
     }
+
+    getLicenses(packagePath: string) {
+        return this.ipc.send('get-licenses', packagePath);
+    }
 }
