@@ -1,6 +1,6 @@
 {
   "name": "npm-interface",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A cross-platform user interface for NPM",
   "main": "main.js",
   "scripts": {

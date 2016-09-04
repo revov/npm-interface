@@ -1,6 +1,16 @@
-#NPM Interface (Work In Progress)
-## Graphical User Interface for the Node Package Manager, built with Electron ##
+#NPM Interface (Early Alpha)
+## Graphical User Interface for the Node Package Manager, built with Electron and Angular 2 ##
 
+### Implemented Features ###
+- Displaying Package (and dependencies) information including markdown rendered README
+- Browsing Package dependencies.
+  - Installing new dependencies with `--save` or `--save-dev` option
+  - Getting visual information on outdated dependencies. Updating them with a single click.
+- Getting visual feedback from `npm install/update` commands using [xterm.js](https://github.com/sourcelair/xterm.js)
+- Getting a summary for the licenses of all installed dependencies (grouped by license)
+
+
+### Running ###
 In development mode the ES5 angular dist files are used along with JIT (Just in Time) template compilation. To start the Electron app in development mode run:
 ```
 npm run start
