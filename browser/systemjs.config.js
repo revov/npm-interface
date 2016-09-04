@@ -1,114 +1,73 @@
-/**
- * System configuration for Angular 2 samples
- * Adjust as necessary for your application needs.
- */
-(function(global) {
-
-  // map tells the System loader where to look for things
-  var map = {
-    'npm-interface': 'out',
-    '@angular': 'node_modules/@angular',
-    'rxjs': 'node_modules/rxjs',
-    '@ng-bootstrap': 'node_modules/@ng-bootstrap',
-    'css': 'node_modules/systemjs-plugin-css/css.js',
-    'bootstrap': 'node_modules/bootstrap',
-    'marked': 'node_modules/marked',
-    'xterm': 'node_modules/xterm',
-  };
-
-  // packages tells the System loader how to load when no filename and/or no extension
-  var packages = {
-    "npm-interface": {
-      "main": "main.js",
-      "defaultExtension": 'js'
-    },
-    'rxjs': {
-      defaultExtension: 'js'
-    },
-    'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
-    '@ng-bootstrap/ng-bootstrap': {
-      main: 'index.js',
-      defaultExtension: 'js',
-      map: {
-        './accordion': './accordion/index',
-        './alert': './alert/index',
-        './buttons': './buttons/index',
-        './carousel': './carousel/index',
-        './collapse': './collapse/index',
-        './dropdown': './dropdown/index',
-        './pagination': './pagination/index',
-        './popover': './popover/index',
-        './progressbar': './progressbar/index',
-        './rating': './rating/index',
-        './tabset': './tabset/index',
-        './timepicker': './timepicker/index',
-        './tooltip': './tooltip/index',
-        './typeahead': './typeahead/index',
-      }
-    },
-    'marked': {
-      main: 'lib/marked.js',
-      defaultExtension: 'js',
-    },
-    'xterm': {
-      main: 'src/xterm.js',
-      meta: {
-        // 'src/xterm.js': {
-        //   format: 'global', // load this module as a global
-        //   exports: 'Terminal', // the global property to take as the module value
-        // }
-        '*': {
-          deps: [
-            'xterm/src/xterm.css',
-          ]
-        }
-      }
-    },
-  };
-
-  var ngPackageNames = [
-    'common',
-    'compiler',
-    'core',
-    'forms',
-    'http',
-    'platform-browser',
-    'platform-browser-dynamic',
-    'router',
-    'router-deprecated',
-    'upgrade',
-  ];
-
-  // Individual files (~300 requests):
-  function packIndex(pkgName) {
-    packages['@angular/'+pkgName] = { main: 'index.js', defaultExtension: 'js' };
-  }
-
-  // Bundled (~40 requests):
-  function packUmd(pkgName) {
-    packages['@angular/'+pkgName] = { main: '/bundles/' + pkgName + '.umd.js', defaultExtension: 'js' };
-  }
-
-  // Most environments should use UMD; some (Karma) need the individual index files
-  // var setPackageConfig = System.packageWithIndex ? packIndex : packUmd;
-  var setPackageConfig = packIndex;
-
-  // Add package entries for angular packages
-  ngPackageNames.forEach(setPackageConfig);
-
-  var config = {
+System.config({
     transpiler: false,
     browserConfig: {
-      "baseURL": "."
+        "baseURL": "."
     },
     paths: {
-      'node_modules/*': '../node_modules/*'
+        'npm:': '../node_modules/'
     },
     meta: {
-      '*.css': { loader: 'css' }
+        '*.css': { loader: 'css' }
     },
-    map: map,
-    packages: packages
-  };
-  System.config(config);
-})(this);
+    map: {
+        'npm-interface': 'out',
+        '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
+        '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
+        '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
+        '@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
+        '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+        '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+        '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
+        '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
+        'rxjs': 'npm:rxjs',
+        '@ng-bootstrap': 'npm:@ng-bootstrap',
+        'css': 'npm:systemjs-plugin-css/css.js',
+        'bootstrap': 'npm:bootstrap',
+        'marked': 'npm:marked',
+        'xterm': 'npm:xterm',
+    },
+    packages: {
+        "npm-interface": {
+            "main": "main.js",
+            "defaultExtension": 'js'
+        },
+        'rxjs': {
+            defaultExtension: 'js'
+        },
+        'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
+        '@ng-bootstrap/ng-bootstrap': {
+            main: 'index.js',
+            defaultExtension: 'js',
+            map: {
+                './accordion': './accordion/accordion',
+                './alert': './alert/alert',
+                './buttons': './buttons/buttons',
+                './carousel': './carousel/carousel',
+                './collapse': './collapse/collapse',
+                './dropdown': './dropdown/dropdown',
+                './pagination': './pagination/pagination',
+                './popover': './popover/popover',
+                './progressbar': './progressbar/progressbar',
+                './rating': './rating/rating',
+                './tabset': './tabset/tabset',
+                './timepicker': './timepicker/timepicker',
+                './tooltip': './tooltip/tooltip',
+                './typeahead': './typeahead/typeahead',
+            }
+        },
+        'marked': {
+            main: 'lib/marked.js',
+            defaultExtension: 'js',
+        },
+        'xterm': {
+            main: 'src/xterm.js',
+            meta: {
+                '*': {
+                    deps: [
+                        'xterm/src/xterm.css',
+                    ]
+                }
+            }
+        },
+    }
+});

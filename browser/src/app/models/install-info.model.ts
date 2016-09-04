@@ -1,5 +1,5 @@
-export default class InstallInfoModel {
+export interface InstallInfoModel {
     packageName: string;
     packageVersion: string;
-    isDev: boolean;
+    isDev?: boolean;
 }

@@ -3,7 +3,7 @@ import { ProjectService } from '../../services/project.service';
 
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import InstallInfoModel from '../../models/install-info.model';
+import { InstallInfoModel } from '../../models/install-info.model';
 
 import { remote } from '@node/electron';
 

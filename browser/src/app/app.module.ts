@@ -21,7 +21,7 @@ import { KeysPipe } from './pipes/keys.pipe';
 import { ElectronIpcModule } from '../electron-ipc/electron-ipc.module';
 import { XtermModule } from '../xterm/xterm.module';
 
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap/accordion/index';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap/accordion/accordion.module';
 import { FormsModule } from '@angular/forms';
 
 import { routing, appRoutingProviders } from './routes';

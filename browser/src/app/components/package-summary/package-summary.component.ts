@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from
 import 'bootstrap/dist/css/bootstrap.css';
 import marked = require('marked');
 import { ProjectService } from '../../services/project.service';
-import InstallInfoModel from '../../models/install-info.model';
+import { InstallInfoModel } from '../../models/install-info.model';
 
 @Component({
     selector: 'packageSummary',
