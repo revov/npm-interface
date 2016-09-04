@@ -3,3 +3,4 @@ require('./get-readme');
 require('./get-licenses');
 require('./get-outdated');
 require('./install');
+require('./validate-package');

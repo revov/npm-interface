@@ -11,25 +11,33 @@ import { remote } from '@node/electron';
     template: `
         <div>
             <div *ngIf="currentPackage == null" class="alert alert-info" role="alert">Please select a project to open (File -> Open)</div>
-            <ngb-accordion *ngIf="currentPackage" activeIds="ngb-panel-0" [closeOthers]="true">
-                <ngb-panel *ngFor="let dep of currentPackage.dependencies | keys">
-                    <template ngbPanelTitle>
-                        <span [hidden]="!currentPackage.devDependencies[dep.key]" class="tag tag-default tag-pill pull-xs-right">dev</span>
-                        <span
-                            [hidden]="!outdatedPackages || (outdatedPackages && !outdatedPackages[dep.key])"
-                            class="tag tag-danger tag-pill pull-xs-right"
-                        >update available</span>
-                        {{dep.value.name}}
-                    </template>
-                    <template ngbPanelContent>
-                        <packageSummary
-                            [packageInfo]="dep.value"
-                            [outdatedInfo]="outdatedPackages ? outdatedPackages[dep.key] : null"
-                            (onUpdate)="handlePackageUpdate($event)"
-                        ></packageSummary>
-                    </template>
-                </ngb-panel>
-            </ngb-accordion>
+            
+            <div class="container">
+
+                <div *ngIf="currentPackage" class="m-y-2">
+                    <installForm [packagePath]="currentPackage.path" (installPackage)="handlePackageInstall($event)"></installForm>
+                </div>
+
+                <ngb-accordion *ngIf="currentPackage" activeIds="ngb-panel-0" [closeOthers]="true">
+                    <ngb-panel *ngFor="let dep of currentPackage.dependencies | keys">
+                        <template ngbPanelTitle>
+                            <span [hidden]="!currentPackage.devDependencies[dep.key]" class="tag tag-default tag-pill pull-xs-right">dev</span>
+                            <span
+                                [hidden]="!outdatedPackages || (outdatedPackages && !outdatedPackages[dep.key])"
+                                class="tag tag-danger tag-pill pull-xs-right"
+                            >update available</span>
+                            {{dep.value.name}}
+                        </template>
+                        <template ngbPanelContent>
+                            <packageSummary
+                                [packageInfo]="dep.value"
+                                [outdatedInfo]="outdatedPackages ? outdatedPackages[dep.key] : null"
+                                (onUpdate)="handlePackageInstall($event, true)"
+                            ></packageSummary>
+                        </template>
+                    </ngb-panel>
+                </ngb-accordion>
+            </div>
 
             <div *ngIf="showXterm" class="modal fade in" data-backdrop="true" tabindex="-1" style="display: block">
                 <div class="modal-dialog modal-lg">
@@ -80,18 +88,24 @@ export class DependenciesComponent {
         this.outdatedPackagesSubscription.unsubscribe();
     }
 
-    handlePackageUpdate(dependency: InstallInfoModel) {
-        this.xtermStream = this.projectService.install(
-            this.currentPackage.path,
-            `${dependency.packageName}@${dependency.packageVersion}`,
-            this.currentPackage.devDependencies[dependency.packageName] ? true : false
-        );
+    handlePackageInstall(packageInfo: InstallInfoModel, isUpdate: boolean = false) {
+        const packageIdentifier: string =
+            packageInfo.packageVersion == '' ?
+            `${packageInfo.packageName}` :
+            `${packageInfo.packageName}@${packageInfo.packageVersion}`
+        
+        const isDev: boolean =
+            isUpdate ?
+            (this.currentPackage.devDependencies[packageInfo.packageName] ? true : false) :
+            packageInfo.isDev;
+
+        this.xtermStream = this.projectService.install(this.currentPackage.path, packageIdentifier, isDev);
 
         this.xtermStream
             .subscribe(
-                line => {console.log(line)},
+                line => {},
                 err => {
-                    remote.dialog.showErrorBox(`There was an error updating the package. npm exit code: ${err}`);
+                    remote.dialog.showErrorBox('There was an error installing the package.', `npm exit code: ${err}`);
                     this.projectService.load(this.currentPackage.path);
                     this.isBusyExecutingACommand = false;
                 },

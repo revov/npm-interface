@@ -93,4 +93,8 @@ export class ProjectService {
     getLicenses(packagePath: string) {
         return this.ipc.send('get-licenses', packagePath);
     }
+
+    validatePackage(packagePath: string, packageToValidate: string, version: string) {
+        return this.ipc.send('validate-package', packagePath, packageToValidate, version);
+    }
 }

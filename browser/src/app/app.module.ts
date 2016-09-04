@@ -7,6 +7,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { PackageSummaryComponent } from './components/package-summary/package-summary.component';
 import { LoadingMaskComponent } from './components/loading-mask/loading-mask.component';
 import { PackagesPerLicenseComponent } from './components/packages-per-license/packages-per-license.component';
+import { InstallFormComponent } from './components/install-form/install-form.component';
 
 import { PackageInfoComponent } from './routes/package-info/package-info.component';
 import { DependenciesComponent } from './routes/dependencies/dependencies.component';
@@ -22,7 +23,7 @@ import { ElectronIpcModule } from '../electron-ipc/electron-ipc.module';
 import { XtermModule } from '../xterm/xterm.module';
 
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap/accordion/accordion.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { routing, appRoutingProviders } from './routes';
 
@@ -31,6 +32,7 @@ import { routing, appRoutingProviders } from './routes';
         BrowserModule,
         routing,
         FormsModule,
+        ReactiveFormsModule,
         ElectronIpcModule.forRoot(),
         NgbAccordionModule,
         XtermModule
@@ -45,7 +47,8 @@ import { routing, appRoutingProviders } from './routes';
         PackageSummaryComponent,
         KeysPipe,
         LoadingMaskComponent,
-        PackagesPerLicenseComponent
+        PackagesPerLicenseComponent,
+        InstallFormComponent
     ],
     providers: [
         appRoutingProviders,
