@@ -110,15 +110,33 @@ export class ProjectService {
         return this.ipc.send('validate-package', packagePath, packageToValidate, version);
     }
 
+    /**
+     * Runs an npm script. Safe to call only when there is a loaded project
+     */
     runScript(script: string) {
+        if(!this.scriptRunner) {
+            throw new Error('Script runner not instantiated. Check if a project was already loaded.');
+        }
+
         return this.scriptRunner.runScript(script);
     }
 
+    /**
+     * Stops an npm script. Safe to call only when there is a loaded project
+     */
     stopScript(script: string) {
+        if(!this.scriptRunner) {
+            throw new Error('Script runner not instantiated. Check if a project was already loaded.');
+        }
+
         return this.scriptRunner.stopScript(script);
     }
 
-    getRunningScripts() {
+    getRunningScripts(): {[s: string]: Observable<string>} {
+        if(!this.scriptRunner) {
+            return {};
+        }
+
         return this.scriptRunner.getRunningScripts();
     }
 }

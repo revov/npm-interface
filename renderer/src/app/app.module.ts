@@ -13,6 +13,7 @@ import { PackageInfoComponent } from './routes/package-info/package-info.compone
 import { DependenciesComponent } from './routes/dependencies/dependencies.component';
 import { LicensesComponent }    from './routes/licenses/licenses.component';
 import { ScriptsComponent } from './routes/scripts/scripts.component';
+import { RunScriptButtonComponent } from './routes/scripts/run-script-button.component';
 
 import { ProjectService } from './services/project.service';
 import { IsLoadingService } from './services/is-loading.service';
@@ -48,7 +49,8 @@ import { routing, appRoutingProviders } from './routes';
         KeysPipe,
         LoadingMaskComponent,
         PackagesPerLicenseComponent,
-        InstallFormComponent
+        InstallFormComponent,
+        RunScriptButtonComponent
     ],
     providers: [
         appRoutingProviders,

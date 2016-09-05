@@ -23,8 +23,7 @@ import { Subscription } from 'rxjs/Subscription';
                         <p *ngIf="runningScripts[script.key]" class="card-text">
                             <xterm [dataStream]="runningScripts[script.key]"></xterm>
                         </p>
-                        <a href="javascript:void(0)" class="card-link" [hidden]="runningScripts[script.key]" (click)="handleRunScript(script.key)">Run</a>
-                        <a href="javascript:void(0)" class="card-link" [hidden]="!runningScripts[script.key]" (click)="handleStopScript(script.key)">Stop</a>
+                        <runScriptButton [scriptStream]="runningScripts[script.key]" (run)="handleRun(script.key)" (stop)="handleStop(script.key)"></runScriptButton>
                     </div>
                 </div>
             </div>
@@ -59,11 +58,11 @@ export class ScriptsComponent {
         this.currentPackageSubscription.unsubscribe();
     }
 
-    handleRunScript(script: string) {
+    handleRun(script: string) {
         this.runningScripts[script] = this.projectService.runScript(script);
     }
 
-    handleStopScript(script: string) {
+    handleStop(script: string) {
         this.projectService.stopScript(script);
     }
 }
