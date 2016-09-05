@@ -12,7 +12,7 @@ fs.writeFileSync(
     'module.exports = { __esModule: true, "default": require("core-js/library/fn/json/stringify") };'
 );
 
-const baseURL = path.resolve(__dirname, '../browser');
+const baseURL = path.resolve(__dirname, '../renderer');
 // For whatever reason the builder is not looking for node_modules in the correct place, so we need to chdir to the baseUrl
 require('process').chdir(baseURL);
 

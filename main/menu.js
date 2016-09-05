@@ -36,7 +36,7 @@ const template = [
         label: 'Reload',
         accelerator: process.platform === 'darwin' ? 'Command+R' : 'Ctrl+R',
         click (item, focusedWindow) {
-          if (focusedWindow) focusedWindow.loadURL(`file://${path.resolve(__dirname, '..')}/browser/index.html`);
+          if (focusedWindow) focusedWindow.loadURL(`file://${path.resolve(__dirname, '..')}/renderer/index.html`);
         }
       },
       {

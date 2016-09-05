@@ -1,8 +1,8 @@
 const {app, BrowserWindow, shell} = require('electron');
 const path = require('path');
 
-require('./server/menu');
-require('./server/handlers/index');
+require('./main/menu');
+require('./main/handlers/index');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,7 +19,7 @@ function createWindow () {
   win.maximize();
 
   // and load the index.html of the app.
-  win.loadURL(`file://${__dirname}/browser/index.html`);
+  win.loadURL(`file://${__dirname}/renderer/index.html`);
 
   // Open the DevTools.
   win.webContents.openDevTools();

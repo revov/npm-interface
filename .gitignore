@@ -1,4 +1,4 @@
 npm-debug.log
 node_modules
 **/*.ngfactory.ts
-/browser/out
+/renderer/out
