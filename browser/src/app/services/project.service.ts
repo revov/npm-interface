@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { IsLoadingService } from './is-loading.service';
+import { ScriptRunner } from './script-runner';
 
 @Injectable()
 export class ProjectService {
@@ -15,6 +16,8 @@ export class ProjectService {
 
     protected _outdatedPackagesSubject: ReplaySubject<any> = new ReplaySubject<any>(1);
     outdatedPackages: Observable<any> = this._outdatedPackagesSubject.asObservable();
+
+    protected scriptRunner: ScriptRunner;
 
     constructor(protected ipc: IpcService, protected titleService: Title, protected isLoadingService: IsLoadingService) {
         this.ipc.on('load-project', this.handleProjectLoaded);
@@ -27,6 +30,14 @@ export class ProjectService {
 
     protected handleProjectLoaded = (event, packagePath: string) => {
         const fullInfoLoadingId = this.isLoadingService.startLoading();
+        const outdatedLoadingId = this.isLoadingService.startLoading();
+
+        if(this.scriptRunner) {
+            this.scriptRunner.destroy();
+        }
+
+        this.scriptRunner = new ScriptRunner(this.ipc, packagePath);
+
         this.getFullInfo(packagePath)
             .subscribe(
                 packageInfo => this._currentPackageSubject.next(packageInfo),
@@ -37,7 +48,6 @@ export class ProjectService {
                 () => this.isLoadingService.completeLoading(fullInfoLoadingId)
             );
 
-        const outdatedLoadingId = this.isLoadingService.startLoading();
         this.getOutdated(packagePath)
             .subscribe(
                 outdatedPackages => this._outdatedPackagesSubject.next(outdatedPackages),
@@ -56,6 +66,8 @@ export class ProjectService {
         this.ipc.removeListener('load-project', this.handleProjectLoaded);
         this._currentPackageSubject.complete();
         this._outdatedPackagesSubject.complete();
+        this.scriptRunner.destroy();
+        this.scriptRunner = null;
     }
 
     /**
@@ -96,5 +108,17 @@ export class ProjectService {
 
     validatePackage(packagePath: string, packageToValidate: string, version: string) {
         return this.ipc.send('validate-package', packagePath, packageToValidate, version);
+    }
+
+    runScript(script: string) {
+        return this.scriptRunner.runScript(script);
+    }
+
+    stopScript(script: string) {
+        return this.scriptRunner.stopScript(script);
+    }
+
+    getRunningScripts() {
+        return this.scriptRunner.getRunningScripts();
     }
 }

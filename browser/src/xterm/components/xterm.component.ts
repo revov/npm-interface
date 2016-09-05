@@ -1,5 +1,5 @@
 /// <reference path="../../typings/xterm.d.ts" />
-import { Component, OnInit, OnChanges, SimpleChanges, OnDestroy, ElementRef, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, OnDestroy, ElementRef, Input, ChangeDetectionStrategy } from '@angular/core';
 import Terminal = require('xterm');
 import 'xterm/addons/fit/fit.js';
 
@@ -14,18 +14,20 @@ import { Subscription } from 'rxjs/Subscription';
         </div>
     `
 })
-export class XtermComponent implements OnInit, OnChanges, OnDestroy {
+export class XtermComponent implements OnChanges, OnDestroy {
     term: Terminal;
 
     @Input()
     dataStream: Observable<string>;
     protected dataStreamSubscription: Subscription;
 
-    constructor(protected elementRef: ElementRef) {
+    constructor(protected elementRef: ElementRef) { }
 
-    }
+    ensureInitialized() {
+        if(this.term) {
+            return;
+        }
 
-    ngOnInit() {
         this.term = new Terminal();
         const containerEl = this.elementRef.nativeElement.children[0];
         this.term.open(containerEl);
@@ -33,13 +35,18 @@ export class XtermComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        this.ensureInitialized();
+
         if(changes['dataStream'] && changes['dataStream'].currentValue) {
             if(this.dataStreamSubscription) {
                 this.dataStreamSubscription.unsubscribe();
             }
-            this.dataStreamSubscription = this.dataStream.subscribe(data => {
-                this.term.write(data.replace(/\n/g, '\n\r'));
-            });
+            this.dataStreamSubscription = this.dataStream.subscribe(
+                data => {
+                    this.term.write(data.replace(/\n/g, '\n\r'));
+                },
+                exitCode => console.log(`Exit code: ${exitCode}`)
+            );
         }
     }
 

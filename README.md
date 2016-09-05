@@ -8,6 +8,7 @@
   - Getting visual information on outdated dependencies. Updating them with a single click.
 - Getting visual feedback from `npm install/update` commands using [xterm.js](https://github.com/sourcelair/xterm.js)
 - Getting a summary for the licenses of all installed dependencies (grouped by license)
+- Simultaneously running and interrupting `npm` scripts with live console output.
 
 
 ### Running ###
