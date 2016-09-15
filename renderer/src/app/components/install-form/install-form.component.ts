@@ -20,7 +20,7 @@ import 'bootstrap/dist/css/bootstrap.css';
                     <div class="input-group-addon">@</div>
                     <input type="text" class="form-control" formControlName="version" placeholder="version">
                 </div>
-                <div class="form-control-feedback" [hidden]="installForm.valid">{{installForm.errors?.package || installForm.errors?.version}}</div>
+                <div class="form-control-feedback" [hidden]="installForm.valid">{{getErrorMessage()}}</div>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
@@ -70,5 +70,12 @@ export class InstallFormComponent implements OnInit {
             packageVersion: this.installForm.value['version'],
             isDev: this.installForm.value['isDev']
         });
+    }
+    getErrorMessage(): string {
+        if(this.installForm.errors) {
+            return this.installForm.errors['package'] || this.installForm.errors['package'];
+        }
+
+        return '';
     }
 }
