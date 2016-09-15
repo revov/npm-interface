@@ -20,7 +20,7 @@ System.config({
         '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
         '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
         'rxjs': 'npm:rxjs',
-        '@ng-bootstrap': 'npm:@ng-bootstrap',
+        '@ng-bootstrap/ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
         'css': 'npm:systemjs-plugin-css/css.js',
         'bootstrap': 'npm:bootstrap',
         'marked': 'npm:marked',
@@ -35,26 +35,6 @@ System.config({
             defaultExtension: 'js'
         },
         'angular2-in-memory-web-api': { main: 'index.js', defaultExtension: 'js' },
-        '@ng-bootstrap/ng-bootstrap': {
-            main: 'index.js',
-            defaultExtension: 'js',
-            map: {
-                './accordion': './accordion/accordion',
-                './alert': './alert/alert',
-                './buttons': './buttons/buttons',
-                './carousel': './carousel/carousel',
-                './collapse': './collapse/collapse',
-                './dropdown': './dropdown/dropdown',
-                './pagination': './pagination/pagination',
-                './popover': './popover/popover',
-                './progressbar': './progressbar/progressbar',
-                './rating': './rating/rating',
-                './tabset': './tabset/tabset',
-                './timepicker': './timepicker/timepicker',
-                './tooltip': './tooltip/tooltip',
-                './typeahead': './typeahead/typeahead',
-            }
-        },
         'marked': {
             main: 'lib/marked.js',
             defaultExtension: 'js',
