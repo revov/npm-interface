@@ -1,6 +1,37 @@
-const {Menu} = require('electron')
+const {Menu, MenuItem} = require('electron')
 const path = require('path');
 const {dialog} = require('electron');
+
+const { recentFoldersDb } = require('./database');
+
+function loadProject(packagePath, focusedWindow) {
+    recentFoldersDb.remove({path: packagePath}, () => {
+        recentFoldersDb.insert({path: packagePath}, (err, docs) => {
+            updateOpenRecentSubmenu();
+        });
+    });
+
+    focusedWindow.webContents.send('load-project', packagePath);
+}
+
+function buildOpenRecentSubmenuItems() {
+    return new Promise((resolve, reject) => {
+        recentFoldersDb.find({}).sort({ createdAt: -1 }).limit(5).exec(function (err, docs) {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(docs.map(doc => {
+                    return new MenuItem({
+                        label: doc.path,
+                        click (item, focusedWindow) {
+                            loadProject(doc.path, focusedWindow);
+                        }
+                    });
+                }));
+            }
+        });
+    });
+}
 
 const template = [
   {
@@ -19,9 +50,13 @@ const template = [
           );
 
           if(directories && directories[0]) {
-            focusedWindow.webContents.send('load-project', directories[0]);
+            loadProject(directories[0], focusedWindow);
           }
         }
+      },
+      {
+          label: 'Open Recent',
+          submenu: []
       },
       {
         role: 'quit'
@@ -57,5 +92,17 @@ const template = [
 ];
 
 const menu = Menu.buildFromTemplate(template);
+const openRecentSubmenu = menu.items[0].submenu.items[1].submenu;
 Menu.setApplicationMenu(menu);
 
+function updateOpenRecentSubmenu() {
+    buildOpenRecentSubmenuItems()
+        .then(newOpenRecentSubmenuItems => {
+            openRecentSubmenu.clear();
+            newOpenRecentSubmenuItems.forEach(menuItem => {
+                openRecentSubmenu.append(menuItem);
+            });
+        });
+}
+
+updateOpenRecentSubmenu();
